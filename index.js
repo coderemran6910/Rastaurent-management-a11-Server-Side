@@ -28,10 +28,15 @@ async function run() {
 
     const allProductsCollection = client.db('foodsDb').collection('food');
 
+    // Services related Api 
     app.post('/api/v1/foods', async(req, res)=>{
         const data = req.body;
         console.log(data);
         const result = await allProductsCollection.insertOne(data)
+        res.send(result)
+    })
+    app.get('/api/v1/foods', async(req, res)=>{
+        const result = await allProductsCollection.find({}).toArray();
         res.send(result)
     })
 
