@@ -19,7 +19,7 @@ const client = new MongoClient(uri, {
     strict: true,
     deprecationErrors: true,
   }
-});
+}); 
 
 async function run() {
   try {
@@ -27,6 +27,7 @@ async function run() {
     await client.connect();
 
     const allProductsCollection = client.db('foodsDb').collection('food');
+    const orderCollection = client.db('foodsDb').collection('order');
 
     // Services related Api 
     app.post('/api/v1/foods', async(req, res)=>{
@@ -45,20 +46,31 @@ async function run() {
         .toArray();
         res.send(result)
     })
-    // get Single Products by ID
+    // get Single Products by ID 
     app.get('/api/v1/foods/:id', async(req, res)=>{
       const id = req.params.id
       const query = {_id : new ObjectId(id)}
       const result = await allProductsCollection.findOne(query)
       res.send(result)
     })
+
+    app.post('/api/v1/orders', async(req, res)=>{
+      const body = req.body;
+      const result = await orderCollection.insertOne(body);
+      res.send(result);
+    })
+
+
+
+
+    // Pagination API
     app.get('/api/v1/foodcount', async(req, res)=>{
       const count = await allProductsCollection.estimatedDocumentCount();
       res.send({count})
     })
 
 
-
+ 
 
 
 
