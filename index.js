@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.PORT || 5000
 
@@ -35,6 +35,7 @@ async function run() {
         const result = await allProductsCollection.insertOne(data)
         res.send(result)
     })
+    //get All Products
     app.get('/api/v1/foods', async(req, res)=>{
       const page = parseInt(req.query.page)
       const size = parseInt(req.query.size)
@@ -43,6 +44,13 @@ async function run() {
         .limit(size)
         .toArray();
         res.send(result)
+    })
+    // get Single Products by ID
+    app.get('/api/v1/foods/:id', async(req, res)=>{
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result = await allProductsCollection.findOne(query)
+      res.send(result)
     })
     app.get('/api/v1/foodcount', async(req, res)=>{
       const count = await allProductsCollection.estimatedDocumentCount();
