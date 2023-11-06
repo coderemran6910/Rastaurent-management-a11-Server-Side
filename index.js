@@ -36,10 +36,18 @@ async function run() {
         res.send(result)
     })
     app.get('/api/v1/foods', async(req, res)=>{
-        const result = await allProductsCollection.find({}).toArray();
+      const page = parseInt(req.query.page)
+      const size = parseInt(req.query.size)
+        const result = await allProductsCollection.find({})
+        .skip(page*size)
+        .limit(size)
+        .toArray();
         res.send(result)
     })
-
+    app.get('/api/v1/foodcount', async(req, res)=>{
+      const count = await allProductsCollection.estimatedDocumentCount();
+      res.send({count})
+    })
 
 
 
