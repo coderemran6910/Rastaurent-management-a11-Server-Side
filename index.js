@@ -48,6 +48,12 @@ async function run() {
         .toArray();
       res.send(result);
     });
+
+
+
+
+
+
     // get Single Products by ID
     app.get("/api/v1/foods/:id", async (req, res) => {
       const id = req.params.id;
@@ -55,6 +61,24 @@ async function run() {
       const result = await allProductsCollection.findOne(query);
       res.send(result);
     });
+    app.put("/api/v1/foods/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedData = req.body;
+      const updateDoc = {
+        $set: updatedData, // Remove the quotes around updatedData
+      };
+    
+      const result = await allProductsCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
+    
+
+
+
+
 
     app.post("/api/v1/orders", async (req, res) => {
       const body = req.body;
@@ -69,6 +93,25 @@ async function run() {
       const result = await orderCollection.find(query).toArray()
       res.send(result);
     });
+    app.delete("/api/v1/orders/:id", async(req, res)=>{
+      const id = req.params.id ;
+      const query = {_id : new ObjectId(id)}
+      const result = orderCollection.deleteOne(query)
+      res.send(result)
+    })
+
+
+
+
+    // My ALl added products 
+    app.get("/api/v1/products/:email", async(req, res)=>{
+      const email = req.params.email;
+      const query = { authEmail: email };
+      const result = await allProductsCollection.find(query).toArray()
+      res.send(result)
+    })
+
+
 
     // Pagination API
     app.get("/api/v1/foodcount", async (req, res) => {
