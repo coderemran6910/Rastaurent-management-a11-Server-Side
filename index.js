@@ -11,9 +11,9 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(cors({
   origin: [
-    'http://localhost:5173',
-    'https://rastaurent-management-a-11.web.app/', 
-    'https://rastaurent-management-a-11.firebaseapp.com/'
+    // 'http://localhost:5173',
+    'https://rastaurent-management-a-11.web.app', 
+    'https://rastaurent-management-a-11.firebaseapp.com'
 ],
   credentials: true
 }));
@@ -35,7 +35,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const allProductsCollection = client.db("foodsDb").collection("food");
     const orderCollection = client.db("foodsDb").collection("order");
@@ -60,9 +60,10 @@ app.post("/jwt", async (req, res) => {
   .send({success: true})
 })
 
+
 app.post('/logout', async(req, res)=>{
   const user = req.body;
-  console.log('log out', user);
+  console.log('logOut', user);
 
   res.clearCookie('token' , {maxAge:0}).send({success:true})   
 })
@@ -89,9 +90,6 @@ app.post('/logout', async(req, res)=>{
         .toArray();
       res.send(result);
     });
-
-
-
 
 
 
