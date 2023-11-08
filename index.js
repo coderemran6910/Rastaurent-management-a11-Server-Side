@@ -11,12 +11,13 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(cors({
   origin: [
-    // 'http://localhost:5173'
+    'http://localhost:5173',
     'https://rastaurent-management-a-11.web.app/', 
     'https://rastaurent-management-a-11.firebaseapp.com/'
 ],
   credentials: true
 }));
+
 app.use(cookieParser());
 app.use(express.json());
 
